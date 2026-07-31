@@ -1,6 +1,25 @@
 # latihan01_17
 
-A new Flutter project.
+Aplikasi Flutter sederhana yang dibuat sebagai bagian dari tugas praktikum 
+Rekayasa Perangkat Lunak (RPL), untuk mempelajari alur kerja pengembangan 
+aplikasi mobile — mulai dari penyiapan lingkungan pengembangan (IDE, SDK, 
+emulator), pembuatan proyek, hingga penggunaan Git untuk kendali versi.
+
+## Fitur
+- Aplikasi counter sederhana (contoh bawaan Flutter) yang menambah angka 
+  setiap kali tombol ditekan
+
+## Teknologi yang Digunakan
+- Flutter SDK
+- Dart
+- Git (kendali versi)
+
+## Cara Menjalankan Proyek
+1. Clone repository ini
+2. Jalankan `flutter pub get` untuk mengunduh dependencies
+3. Jalankan `flutter run` untuk menjalankan aplikasi di emulator/device
+
+---
 
 ## Getting Started
 
