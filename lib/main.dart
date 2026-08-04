@@ -49,7 +49,12 @@ void main() {
   double totalKasir = jumlahBeliKasir * hargaDipakai;
 
   double potongan;
-  if (totalKasir > 200000) {
+  // ===== Aturan baru: anggota dengan total > 500rb dapat potongan 15% =====
+  // Kondisi ini WAJIB dicek paling awal, sebelum aturan 10% dan 5%,
+  // supaya transaksi anggota bertotal besar tidak "kejebak" di aturan lama.
+  if (anggota && totalKasir > 500000) {
+    potongan = totalKasir * 0.15;
+  } else if (totalKasir > 200000) {
     potongan = totalKasir * 0.10;
   } else if (totalKasir > 100000) {
     potongan = totalKasir * 0.05;
@@ -101,16 +106,15 @@ debugPrint("Lokasi : $lokasiRak");
 debugPrint("Kategori : $kategori");
   debugPrint("Lokasi : $lokasiRak");
 
-  // (kode komentar switch-case kamu tetap di sini, tidak diubah)
 
-  // ===== UJI 3 SKENARIO (Tabel C) =====
   debugPrint("\n=== UJI SKENARIO ===");
 
-  // Skenario (a): Anggota, total 250.000
   bool ujiAnggotaA = true;
   double ujiTotalA = 250000;
   double ujiPotonganA;
-  if (ujiTotalA > 200000) {
+  if (ujiAnggotaA && ujiTotalA > 500000) {
+    ujiPotonganA = ujiTotalA * 0.15;
+  } else if (ujiTotalA > 200000) {
     ujiPotonganA = ujiTotalA * 0.10;
   } else if (ujiTotalA > 100000) {
     ujiPotonganA = ujiTotalA * 0.05;
@@ -126,11 +130,12 @@ debugPrint("Kategori : $kategori");
     "Harga akhir: Rp${ujiHargaAkhirA} Kategori: $lokasiRak"
   );
 
-  // Skenario (b): Umum, total 150.000
   bool ujiAnggotaB = false;
   double ujiTotalB = 150000;
   double ujiPotonganB;
-  if (ujiTotalB > 200000) {
+  if (ujiAnggotaB && ujiTotalB > 500000) {
+    ujiPotonganB = ujiTotalB * 0.15;
+  } else if (ujiTotalB > 200000) {
     ujiPotonganB = ujiTotalB * 0.10;
   } else if (ujiTotalB > 100000) {
     ujiPotonganB = ujiTotalB * 0.05;
@@ -144,11 +149,12 @@ debugPrint("Kategori : $kategori");
     "Potongan borongan: 5% Harga akhir: Rp$ujiHargaAkhirB"
   );
 
-  // Skenario (c): Umum, total 50.000
   bool ujiAnggotaC = false;
   double ujiTotalC = 50000;
   double ujiPotonganC;
-  if (ujiTotalC > 200000) {
+  if (ujiAnggotaC && ujiTotalC > 500000) {
+    ujiPotonganC = ujiTotalC * 0.15;
+  } else if (ujiTotalC > 200000) {
     ujiPotonganC = ujiTotalC * 0.10;
   } else if (ujiTotalC > 100000) {
     ujiPotonganC = ujiTotalC * 0.05;
@@ -162,6 +168,87 @@ debugPrint("Kategori : $kategori");
     "Potongan borongan: tanpa potongan Harga akhir: Rp$ujiHargaAkhirC"
   );
 
+  debugPrint("\n=== UJI ATURAN BARU (15% anggota >500rb) ===");
+
+  bool uji1Anggota = true;
+  double uji1Total = 600000;
+  double uji1Potongan;
+  if (uji1Anggota && uji1Total > 500000) {
+    uji1Potongan = uji1Total * 0.15;
+  } else if (uji1Total > 200000) {
+    uji1Potongan = uji1Total * 0.10;
+  } else if (uji1Total > 100000) {
+    uji1Potongan = uji1Total * 0.05;
+  } else {
+    uji1Potongan = 0;
+  }
+  debugPrint("Anggota, total 600.000 -> Potongan: ${uji1Potongan / uji1Total * 100}% (harus 15%)");
+
+  bool uji2Anggota = false;
+  double uji2Total = 600000;
+  double uji2Potongan;
+  if (uji2Anggota && uji2Total > 500000) {
+    uji2Potongan = uji2Total * 0.15;
+  } else if (uji2Total > 200000) {
+    uji2Potongan = uji2Total * 0.10;
+  } else if (uji2Total > 100000) {
+    uji2Potongan = uji2Total * 0.05;
+  } else {
+    uji2Potongan = 0;
+  }
+  debugPrint("Umum, total 600.000 -> Potongan: ${uji2Potongan / uji2Total * 100}% (harus tetap 10%, aturan lama)");
+
+  bool uji3Anggota = true;
+  double uji3Total = 250000;
+  double uji3Potongan;
+  if (uji3Anggota && uji3Total > 500000) {
+    uji3Potongan = uji3Total * 0.15;
+  } else if (uji3Total > 200000) {
+    uji3Potongan = uji3Total * 0.10;
+  } else if (uji3Total > 100000) {
+    uji3Potongan = uji3Total * 0.05;
+  } else {
+    uji3Potongan = 0;
+  }
+  debugPrint("Anggota, total 250.000 -> Potongan: ${uji3Potongan / uji3Total * 100}% (harus tetap 10%, aturan lama)");
+
+
+debugPrint("\n=== DAFTAR BARANG ===");
+
+List<String> namaBarangList = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+List<double> hargaBarangList = [3000, 2500, 1500, 5000];
+
+for (int i = 0; i < namaBarangList.length; i++) {
+  int nomor = i + 1;
+  debugPrint("$nomor. ${namaBarangList[i]} - Rp. ${formatter.format(hargaBarangList[i])}");
+}
+
+
+debugPrint("\n--- Penjualan Buku Tulis ---");
+
+int stokBukuTulis = 3;
+
+while (stokBukuTulis > 0) {
+  stokBukuTulis = stokBukuTulis - 1;
+  debugPrint("Terjual 1, sisa stok: $stokBukuTulis");
+}
+
+
+// Bahaya apa yang muncul bila kondisi berhenti pada while keliru, dan
+// bagaimana cara memastikan koperasi tidak menjual melebihi stok?
+// Jika kondisi while salah — misalnya ditulis "while (stokBukuTulis >= 0)"
+// alih-alih "while (stokBukuTulis > 0)" — maka program akan tetap masuk
+// ke dalam loop saat stok sudah 0, sehingga stok bisa berkurang menjadi
+// minus (-1, -2, dst). Ini berbahaya karena secara nyata artinya koperasi
+// "menjual" barang yang sebenarnya sudah habis, yang bisa membuat data
+// stok tidak akurat dan berpotensi menyebabkan kekecewaan pembeli karena
+// barang yang dibeli sebenarnya tidak ada.
+// Untuk memastikan koperasi tidak menjual melebihi stok, kondisi while
+// harus tepat menggunakan "> 0" (bukan ">= 0"), dan pengurangan stok
+// harus dilakukan SEBELUM stok ditampilkan/dicatat sebagai terjual,
+// sehingga perulangan otomatis berhenti begitu stok mencapai tepat 0,
+// tidak pernah melewatinya menjadi negatif
+
   runApp(const MyApp());
 }
 
@@ -171,13 +258,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter demo coy',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromRGBO(187, 255, 0, 1),
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Flutter Demo coy'),
     );
   }
 }
