@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+double hitungTotal(int jumlah, double harga) {
+  return jumlah * harga;
+}
+double hitungHargaAkhir(double total, double persenPotongan) {
+  return total - (total * persenPotongan / 100);
+}
+
 void main() {
   var formatter = NumberFormat('#,###', 'id_ID');
 
   String namaBarang = "Buku Tulis";
   double hargaAnggota = 3000.0;
   double hargaUmum = 3500.0;
-  int jumlahStok = 0;
+  int jumlahStok = 66;
 
   bool tersedia;
   if (jumlahStok == 0) {
@@ -49,9 +56,6 @@ void main() {
   double totalKasir = jumlahBeliKasir * hargaDipakai;
 
   double potongan;
-  // ===== Aturan baru: anggota dengan total > 500rb dapat potongan 15% =====
-  // Kondisi ini WAJIB dicek paling awal, sebelum aturan 10% dan 5%,
-  // supaya transaksi anggota bertotal besar tidak "kejebak" di aturan lama.
   if (anggota && totalKasir > 500000) {
     potongan = totalKasir * 0.15;
   } else if (totalKasir > 200000) {
@@ -72,40 +76,25 @@ void main() {
   debugPrint("Potongan : Rp${formatter.format(potongan)}");
   debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhir)}");
 
+  String kategori = "atk";
+  String lokasiRak;
 
+  switch (kategori) {
+    case "atk":
+      lokasiRak = "Rak 1";
+      break;
+    case "makanan":
+      lokasiRak = "Rak 2";
+      break;
+    case "minuman":
+      lokasiRak = "Rak 3";
+      break;
+    default:
+      lokasiRak = "Rak lain";
+  }
 
-String kategori = "atk"; // ganti sesuai kategori barang: "atk", "makanan", "minuman"
-String lokasiRak;
-
-switch (kategori) {
-  case "atk":
-    lokasiRak = "Rak 1";
-    break;
-  case "makanan":
-    lokasiRak = "Rak 2";
-    break;
-  case "minuman":
-    lokasiRak = "Rak 3";
-    break;
-  default:
-    lokasiRak = "Rak lain";
-}
-
-debugPrint("Kategori : $kategori");
-debugPrint("Lokasi : $lokasiRak");
-
-// Mengapa switch case lebih rapi dibanding banyak if di sini?
-// Karena switch case membandingkan SATU variabel (kategori) dengan 
-// beberapa kemungkinan nilai yang sudah pasti/tetap (atk, makanan, minuman), 
-// sehingga strukturnya lebih ringkas dan mudah dibaca dibanding menulis 
-// banyak if-else berantai (if kategori == "atk" ... else if kategori == 
-// "makanan" ... dst). Switch-case juga lebih jelas menunjukkan bahwa ini 
-// adalah pengecekan nilai yang sama terhadap banyak kemungkinan, bukan 
-// pengecekan kondisi yang berbeda-beda seperti pada if biasa.
-
-debugPrint("Kategori : $kategori");
+  debugPrint("Kategori : $kategori");
   debugPrint("Lokasi : $lokasiRak");
-
 
   debugPrint("\n=== UJI SKENARIO ===");
 
@@ -212,42 +201,81 @@ debugPrint("Kategori : $kategori");
   }
   debugPrint("Anggota, total 250.000 -> Potongan: ${uji3Potongan / uji3Total * 100}% (harus tetap 10%, aturan lama)");
 
+  debugPrint("\n=== DAFTAR BARANG ===");
 
-debugPrint("\n=== DAFTAR BARANG ===");
+  List<String> namaBarangList = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<double> hargaBarangList = [3000, 2500, 1500, 5000];
 
-List<String> namaBarangList = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
-List<double> hargaBarangList = [3000, 2500, 1500, 5000];
+  for (int i = 0; i < namaBarangList.length; i++) {
+    int nomor = i + 1;
+    debugPrint("$nomor. ${namaBarangList[i]} - Rp. ${formatter.format(hargaBarangList[i])}");
+  }
 
-for (int i = 0; i < namaBarangList.length; i++) {
-  int nomor = i + 1;
-  debugPrint("$nomor. ${namaBarangList[i]} - Rp. ${formatter.format(hargaBarangList[i])}");
-}
+  debugPrint("\n--- Penjualan Buku Tulis ---");
+
+  int stokBukuTulis = 3;
+
+  while (stokBukuTulis > 0) {
+    stokBukuTulis = stokBukuTulis - 1;
+    debugPrint("Terjual 1, sisa stok: $stokBukuTulis");
+  }
+
+  debugPrint("\n=== Total Nilai Koperasi ===");
+
+  List<String> namaBrgStok = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<double> hargaBrgStok = [3000, 2500, 1500, 5000];
+  List<int> jumlahBrgStok = [50, 100, 80, 20];
+
+  double totalNilaiStok = 0;
+
+  for (int i = 0; i < namaBrgStok.length; i++) {
+    double nilaiBarang = hargaBrgStok[i] * jumlahBrgStok[i];
+    totalNilaiStok = totalNilaiStok + nilaiBarang;
+    debugPrint(
+      "${namaBrgStok[i]} : ${jumlahBrgStok[i]} pcs x Rp${formatter.format(hargaBrgStok[i])} "
+      "= Rp${formatter.format(nilaiBarang)}"
+    );
+  }
+
+  debugPrint("Total Nilai Seluruh Stok : Rp${formatter.format(totalNilaiStok)}");
+
+  debugPrint("\n=== LAPORAN STOK MENIPIS (< 5) ===");
+
+  List<String> namaBrgCek = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<int> stokBrgCek = [3, 100, 4, 20];
+
+  for (int i = 0; i < namaBrgCek.length; i++) {
+    if (stokBrgCek[i] < 5) {
+      debugPrint("${namaBrgCek[i]} - sisa stok: ${stokBrgCek[i]} (PERLU RESTOCK!)");
+    }
+  }
+
+  // ===== Panggil fungsi hitungTotal untuk sebuah transaksi =====
+  debugPrint("\n=== FUNGSI hitungTotal() ===");
+
+  int jumlahTransaksi = 10;
+  double hargaTransaksi = 3000.0;
+  double hasilTotal = hitungTotal(jumlahTransaksi, hargaTransaksi);
+
+  debugPrint("Jumlah : $jumlahTransaksi pcs");
+  debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi)}");
+  debugPrint("Total : Rp${formatter.format(hasilTotal)}");
 
 
-debugPrint("\n--- Penjualan Buku Tulis ---");
+  debugPrint("\n== hitungan akhir ==");
 
-int stokBukuTulis = 3;
+int jumlahTransaksi2 = 32;
+double hargaTransaksi2 = 3000.0;
+double persenPotonganTransaksi = 32.0; 
 
-while (stokBukuTulis > 0) {
-  stokBukuTulis = stokBukuTulis - 1;
-  debugPrint("Terjual 1, sisa stok: $stokBukuTulis");
-}
+double totalSebelumPotongan = hitungTotal(jumlahTransaksi2, hargaTransaksi2);
+double hargaAkhirFungsi = hitungHargaAkhir(totalSebelumPotongan, persenPotonganTransaksi);
 
-
-// Bahaya apa yang muncul bila kondisi berhenti pada while keliru, dan
-// bagaimana cara memastikan koperasi tidak menjual melebihi stok?
-// Jika kondisi while salah — misalnya ditulis "while (stokBukuTulis >= 0)"
-// alih-alih "while (stokBukuTulis > 0)" — maka program akan tetap masuk
-// ke dalam loop saat stok sudah 0, sehingga stok bisa berkurang menjadi
-// minus (-1, -2, dst). Ini berbahaya karena secara nyata artinya koperasi
-// "menjual" barang yang sebenarnya sudah habis, yang bisa membuat data
-// stok tidak akurat dan berpotensi menyebabkan kekecewaan pembeli karena
-// barang yang dibeli sebenarnya tidak ada.
-// Untuk memastikan koperasi tidak menjual melebihi stok, kondisi while
-// harus tepat menggunakan "> 0" (bukan ">= 0"), dan pengurangan stok
-// harus dilakukan SEBELUM stok ditampilkan/dicatat sebagai terjual,
-// sehingga perulangan otomatis berhenti begitu stok mencapai tepat 0,
-// tidak pernah melewatinya menjadi negatif
+debugPrint("Jumlah : $jumlahTransaksi2 pcs");
+debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi2)}");
+debugPrint("Total (sebelum potongan) : Rp${formatter.format(totalSebelumPotongan)}");
+debugPrint("Persentase Potongan : $persenPotonganTransaksi%");
+debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}");
 
   runApp(const MyApp());
 }
