@@ -1,25 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-double hitungTotal(int jumlah, double harga) {
-  return jumlah * harga;
-}
-double hitungHargaAkhir(double total, double persenPotongan) {
-  return total - (total * persenPotongan / 100);
-}
-double hitungHarga(bool anggota, double hAnggota, double hUmum) {
-  if (anggota) {
-    return hAnggota;
-  } else {
-    return hUmum;
-  }
-}
-double bayarAkhir(int jumlah, double harga, double persenPotongan) {
-  double total = hitungTotal(jumlah, harga);
-  double hargaAkhir = hitungHargaAkhir(total, persenPotongan);
-  return hargaAkhir;
-}
-
+// ===== KELAS BARANG DITARUH DI LUAR MAIN =====
 class Barang {
   String nama;
   double harga;
@@ -27,13 +9,42 @@ class Barang {
 
   Barang(this.nama, this.harga, this.stok);
 
+  // Method untuk menghitung nilai total stok barang ini
+  double nilaiStok() {
+    return harga * stok;
+  }
+
   void tampilkan() {
-    debugPrint("=== KARTU BARANG ===");
-    debugPrint("Nama  : $nama");
-    debugPrint("Harga : Rp$harga");
-    debugPrint("Stok  : $stok");
+    debugPrint("=== kartru barang ===");
+    debugPrint("Nama       : $nama");
+    debugPrint("Harga      : Rp $harga");
+    debugPrint("Stok       : $stok");
+    debugPrint("Nilai Stok : Rp ${nilaiStok()}");
     debugPrint("");
   }
+}
+
+// ===== FUNGSI-FUNGSI PENDUKUNG =====
+double hitungTotal(int jumlah, double harga) {
+  return jumlah * harga;
+}
+
+double hitungHargaAkhir(double total, double persenPotongan) {
+  return total - (total * persenPotongan / 100);
+}
+
+double hitungHarga(bool anggota, double hAnggota, double hUmum) {
+  if (anggota) {
+    return hAnggota;
+  } else {
+    return hUmum;
+  }
+}
+
+double bayarAkhir(int jumlah, double harga, double persenPotongan) {
+  double total = hitungTotal(jumlah, harga);
+  double hargaAkhir = hitungHargaAkhir(total, persenPotongan);
+  return hargaAkhir;
 }
 
 void main() {
@@ -278,7 +289,6 @@ void main() {
     }
   }
 
-  // ===== Panggil fungsi hitungTotal untuk sebuah transaksi =====
   debugPrint("\n=== FUNGSI hitungTotal() ===");
 
   int jumlahTransaksi = 10;
@@ -288,7 +298,6 @@ void main() {
   debugPrint("Jumlah : $jumlahTransaksi pcs");
   debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi)}");
   debugPrint("Total : Rp${formatter.format(hasilTotal)}");
-
 
   debugPrint("\n== hitungan akhir ==");
 
@@ -305,23 +314,6 @@ void main() {
   debugPrint("Persentase Potongan : $persenPotonganTransaksi%");
   debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}");
 
-
-  // "Bagaimana pemecahan program menjadi fungsi membantu koperasi bila
-  // kelak aturan potongan diubah? Bagian mana yang cukup diubah sekali?"
-  //
-  // Enaknya kalau program dipecah jadi fungsi kayak hitungTotal() dan
-  // hitungHargaAkhir() itu, rumusnya cuma ditulis SEKALI aja di dalam
-  // fungsinya, nggak perlu disalin-salin lagi tiap kali ada transaksi baru.
-  // Jadi misalnya suatu saat koperasi mau ganti aturan potongan — dari
-  // yang tadinya 15% jadi 20%, atau nambah syarat diskon baru — kita
-  // cukup ubah kodenya DI DALAM fungsi hitungHargaAkhir() itu doang, satu
-  // tempat aja. Semua transaksi di seluruh program yang manggil fungsi
-  // ini bakal otomatis ikut pakai aturan yang baru, tanpa perlu nyari-cari
-  // dan ngubah satu-satu di banyak tempat yang berserakan. Ini bikin
-  // program jadi jauh lebih gampang dirawat, dan ngurangin risiko ada
-  // bagian yang "kelewatan" pas aturan diperbarui
-
-
   debugPrint("\n=== FUNGSI hitungHarga() ===");
 
   bool anggotaTes = true;
@@ -332,20 +324,6 @@ void main() {
 
   debugPrint("Status Pembeli : ${anggotaTes ? 'Anggota' : 'Umum'}");
   debugPrint("Harga Terpilih : Rp${formatter.format(hargaTerpilih)}");
-
-
-  // Mengapa memindah keputusan ini ke fungsi mengurangi risiko salah?
-  // Kalau logika "pilih harga sesuai jenis pembeli" ditulis berulang-ulang
-  // di banyak tempat (setiap kali ada transaksi baru), ada risiko besar
-  // salah satu tempat lupa dituliskan atau tertukar urutan kondisinya
-  // (misalnya keliru menaruh harga umum untuk anggota). Dengan memindahkan
-  // logika ini ke dalam SATU fungsi hitungHarga(), aturan "anggota dapat
-  // harga anggota, bukan anggota dapat harga umum" hanya perlu benar SEKALI
-  // saja di dalam fungsi ini. Semua bagian program yang memanggil fungsi
-  // ini otomatis mengikuti aturan yang sama dan konsisten, sehingga jauh
-  // lebih kecil kemungkinan terjadi salah ketik atau salah logika yang
-  // tercecer di berbagai tempat berbeda
-
 
   debugPrint("\n== FUNGSI bayar khir komposisi ==");
 
@@ -360,20 +338,7 @@ void main() {
   debugPrint("Persentase Potongan : $persenPotonganBayar%");
   debugPrint("Harga Akhir (via bayarakhir) : Rp${formatter.format(totalBayarAkhir)}");
 
-  // Apa manfaat menyusun fungsi dari fungsi lain (komposisi)?
-  // Dengan menyusun fungsi bayarAkhir() dari fungsi-fungsi yang sudah ada
-  // sebelumnya (hitungTotal() dan hitungHargaAkhir()), kita tidak perlu
-  // menulis ulang rumus perhitungan dari nol. Setiap fungsi kecil punya
-  // tugasnya masing-masing yang jelas dan sederhana, lalu fungsi yang
-  // lebih besar cukup "menyusun" atau menggabungkan fungsi-fungsi kecil
-  // itu sesuai urutan proses yang diinginkan. Ini membuat kode lebih mudah
-  // dibaca (langsung terlihat alur prosesnya: hitung total dulu, baru
-  // hitung harga akhir), lebih mudah diuji satu per satu (kalau ada
-  // kesalahan, gampang dilacak fungsi mana yang bermasalah), dan tetap
-  // konsisten dengan aturan yang sudah didefinisikan di fungsi-fungsi
-  // sebelumnya tanpa perlu duplikasi kode
-
-  debugPrint("\n== dafftar objek barang (kelas) ==");
+  debugPrint("\n== daftar objek barang (kelas) ==");
 
   Barang bukuTulis = Barang("Buku Tulis", 30000, 606);
   Barang pulpen = Barang("Pulpen", 25000, 100);
@@ -385,29 +350,19 @@ void main() {
     daftarBarang[i].tampilkan();
   }
 
-// Dibanding cara Sprint 3 (List<String> namaBarangList dan List<double>
-// hargaBarangList terpisah), cara ini jauh lebih baik karena satu barang
-// sekarang tersimpan sebagai SATU objek utuh (nama, harga, stok jadi
-// satu kesatuan), bukan tersebar di beberapa list terpisah yang harus
-// diakses pakai index yang sama secara manual (misal namaBarangList[i]
-// dan hargaBarangList[i])
-
-
-// Sprint 5 justifikasi dan komen nua
-
-// Memodelkan barang sebagai objek (OOP) membuat pengembangan sistem koperasi 
-// lebih terstruktur. Atribut seperti nama, harga, dan stok serta perilakunya 
-// tergabung dalam kelas Barang (enkapsulasi). Jika ada perubahan pada struktur 
-// data, cukup ubah di kelas itu tanpa merusak bagian kode lain
-// Selain itu, sistem jadi lebih mudah dikembangkan lewat konsep pewarisan 
-// (inheritance). Misalnya, koperasi mungkin perlu kategori khusus untuk barang 
-// kedaluwarsa atau bergaransi. Data tiap barang juga jadi lebih terisolasi dan 
-// aman, sehingga risiko bug akibat data yang tertukar atau indeks list yang 
-// tidak sinkron dapat dihindari saat transaksi kasirr
+  // Mengapa angka nilaiStok() (harga x stok) berguna bagi laporan aset koperasi?
+  // Angka ini digunakan untuk mengetahui total nilai uang atau modal yang sedang 
+  // tersimpan dalam bentuk barang dagangan di gudang maupun etalase. Dengan 
+  // mengetahui nilai dari tiap barang serta total keseluruhan stok, pengurus 
+  // koperasi bisa menyusun laporan neraca keuangan secara akurat, melihat 
+  // barang mana yang menyerap modal paling besar, serta membantu mengambil 
+  // keputusan manajemen (misalnya mengevaluasi barang bernilai tinggi yang 
+  // penjualannya lambat agar modal tidak tertahan).
 
   runApp(const MyApp());
 }
 
+// ===== KELAS WIDGET FLUTTER =====
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -470,18 +425,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// Menjawab: Mengapa pemilihan tipe data pada program ini penting bagi
-// keakuratan kasir koperasi?
-// Pemilihan tipe data yang tepat memastikan setiap perhitungan (seperti
-// total harga dan selisih) berjalan akurat sesuai sifat datanya masing-masing —
-// misalnya harga memakai double agar bisa menampung nilai desimal, sementara
-// stok memakai int karena jumlah barang selalu bilangan bulat. Jika tipe data
-// salah dipilih, misalnya harga disimpan sebagai String, maka perhitungan
-// otomatis (seperti total = jumlah x harga) akan gagal atau menghasilkan
-// error, sehingga kasir tidak bisa mendapatkan angka transaksi yang benar.
-
-// Referensi: Package intl (pub.dev/packages/intl) — kelas NumberFormat
-// digunakan untuk memformat angka dengan pemisah ribuan sesuai locale
-// tertentu, di sini menggunakan locale 'id_ID' agar formatnya sesuai
-// standar Indonesia (titik sebagai pemisah ribuan)
