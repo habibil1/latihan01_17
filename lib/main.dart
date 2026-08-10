@@ -379,9 +379,18 @@ void main() {
   Barang pulpen = Barang("Pulpen", 25000, 100);
   Barang roti = Barang("Roti", 50000, 200);
 
-  bukuTulis.tampilkan();
-  pulpen.tampilkan();
-  roti.tampilkan();
+  List<Barang> daftarBarang = [bukuTulis, pulpen, roti];
+  
+  for (int i = 0; i < daftarBarang.length; i++) {
+    daftarBarang[i].tampilkan();
+  }
+
+// Dibanding cara Sprint 3 (List<String> namaBarangList dan List<double>
+// hargaBarangList terpisah), cara ini jauh lebih baik karena satu barang
+// sekarang tersimpan sebagai SATU objek utuh (nama, harga, stok jadi
+// satu kesatuan), bukan tersebar di beberapa list terpisah yang harus
+// diakses pakai index yang sama secara manual (misal namaBarangList[i]
+// dan hargaBarangList[i])
 
   runApp(const MyApp());
 }
@@ -462,4 +471,4 @@ class _MyHomePageState extends State<MyHomePage> {
 // Referensi: Package intl (pub.dev/packages/intl) — kelas NumberFormat
 // digunakan untuk memformat angka dengan pemisah ribuan sesuai locale
 // tertentu, di sini menggunakan locale 'id_ID' agar formatnya sesuai
-// standar Indonesia (titik sebagai pemisah ribuan).
+// standar Indonesia (titik sebagai pemisah ribuan)
