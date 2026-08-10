@@ -403,7 +403,7 @@ void main() {
 // (inheritance). Misalnya, koperasi mungkin perlu kategori khusus untuk barang 
 // kedaluwarsa atau bergaransi. Data tiap barang juga jadi lebih terisolasi dan 
 // aman, sehingga risiko bug akibat data yang tertukar atau indeks list yang 
-// tidak sinkron dapat dihindari saat transaksi kasir
+// tidak sinkron dapat dihindari saat transaksi kasirr
 
   runApp(const MyApp());
 }
