@@ -373,7 +373,7 @@ void main() {
   // konsisten dengan aturan yang sudah didefinisikan di fungsi-fungsi
   // sebelumnya tanpa perlu duplikasi kode
 
-  debugPrint("\n=== DAFTAR OBJEK BARANG (KELAS) ===");
+  debugPrint("\n== dafftar objek barang (kelas) ==");
 
   Barang bukuTulis = Barang("Buku Tulis", 30000, 606);
   Barang pulpen = Barang("Pulpen", 25000, 100);
