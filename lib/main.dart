@@ -392,6 +392,19 @@ void main() {
 // diakses pakai index yang sama secara manual (misal namaBarangList[i]
 // dan hargaBarangList[i])
 
+
+// Sprint 5 justifikasi dan komen nua
+
+// Memodelkan barang sebagai objek (OOP) membuat pengembangan sistem koperasi 
+// lebih terstruktur. Atribut seperti nama, harga, dan stok serta perilakunya 
+// tergabung dalam kelas Barang (enkapsulasi). Jika ada perubahan pada struktur 
+// data, cukup ubah di kelas itu tanpa merusak bagian kode lain
+// Selain itu, sistem jadi lebih mudah dikembangkan lewat konsep pewarisan 
+// (inheritance). Misalnya, koperasi mungkin perlu kategori khusus untuk barang 
+// kedaluwarsa atau bergaransi. Data tiap barang juga jadi lebih terisolasi dan 
+// aman, sehingga risiko bug akibat data yang tertukar atau indeks list yang 
+// tidak sinkron dapat dihindari saat transaksi kasir
+
   runApp(const MyApp());
 }
 
