@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// ===== KELAS BARANG DITARUH DI LUAR MAIN =====
 class Barang {
   String nama;
   double harga;
@@ -9,9 +8,13 @@ class Barang {
 
   Barang(this.nama, this.harga, this.stok);
 
-  // Method untuk menghitung nilai total stok barang ini
   double nilaiStok() {
     return harga * stok;
+  }
+
+  // ===== Method baru: cek kecukupan stok =====
+  bool bisaDijual(int diminta) {
+    return diminta <= stok;
   }
 
   void tampilkan() {
@@ -24,7 +27,6 @@ class Barang {
   }
 }
 
-// ===== FUNGSI-FUNGSI PENDUKUNG =====
 double hitungTotal(int jumlah, double harga) {
   return jumlah * harga;
 }
@@ -79,7 +81,9 @@ void main() {
   double totalUmum = jumlahBeli * hargaUmum;
   double selisih = totalUmum - totalAnggota;
 
-  debugPrint("Total (anggota) $jumlahBeli pcs: Rp${formatter.format(totalAnggota)}");
+  debugPrint(
+    "Total (anggota) $jumlahBeli pcs: Rp${formatter.format(totalAnggota)}",
+  );
   debugPrint("Selisih vs umum : Rp${formatter.format(selisih)}");
 
   bool anggota = true;
@@ -149,13 +153,14 @@ void main() {
   } else {
     ujiPotonganA = 0;
   }
+
   double ujiHargaAkhirA = ujiTotalA - ujiPotonganA;
 
   debugPrint(
     "(a) ${ujiAnggotaA ? 'anggota' : 'umum'}, total ${formatter.format(ujiTotalA)} "
     "Harga: ${ujiAnggotaA ? 'anggota' : 'umum'} "
     "Potongan borongan: 10% "
-    "Harga akhir: Rp${ujiHargaAkhirA} Kategori: $lokasiRak"
+    "Harga akhir: Rp${ujiHargaAkhirA} Kategori: $lokasiRak",
   );
 
   bool ujiAnggotaB = false;
@@ -170,11 +175,12 @@ void main() {
   } else {
     ujiPotonganB = 0;
   }
+
   double ujiHargaAkhirB = ujiTotalB - ujiPotonganB;
 
   debugPrint(
     "(b) ${ujiAnggotaB ? 'anggota' : 'umum'}, total ${formatter.format(ujiTotalB)} "
-    "Potongan borongan: 5% Harga akhir: Rp$ujiHargaAkhirB"
+    "Potongan borongan: 5% Harga akhir: Rp$ujiHargaAkhirB",
   );
 
   bool ujiAnggotaC = false;
@@ -189,11 +195,12 @@ void main() {
   } else {
     ujiPotonganC = 0;
   }
+
   double ujiHargaAkhirC = ujiTotalC - ujiPotonganC;
 
   debugPrint(
     "(c) ${ujiAnggotaC ? 'anggota' : 'umum'}, total ${formatter.format(ujiTotalC)} "
-    "Potongan borongan: tanpa potongan Harga akhir: Rp$ujiHargaAkhirC"
+    "Potongan borongan: tanpa potongan Harga akhir: Rp$ujiHargaAkhirC",
   );
 
   debugPrint("\n=== UJI ATURAN BARU (15% anggota >500rb) ===");
@@ -210,7 +217,11 @@ void main() {
   } else {
     uji1Potongan = 0;
   }
-  debugPrint("Anggota, total 600.000 -> Potongan: ${uji1Potongan / uji1Total * 100}% (harus 15%)");
+
+  debugPrint(
+    "Anggota, total 600.000 -> Potongan: "
+    "${uji1Potongan / uji1Total * 100}% (harus 15%)",
+  );
 
   bool uji2Anggota = false;
   double uji2Total = 600000;
@@ -224,7 +235,11 @@ void main() {
   } else {
     uji2Potongan = 0;
   }
-  debugPrint("Umum, total 600.000 -> Potongan: ${uji2Potongan / uji2Total * 100}% (harus tetap 10%, aturan lama)");
+
+  debugPrint(
+    "Umum, total 600.000 -> Potongan: "
+    "${uji2Potongan / uji2Total * 100}% (harus tetap 10%, aturan lama)",
+  );
 
   bool uji3Anggota = true;
   double uji3Total = 250000;
@@ -238,16 +253,28 @@ void main() {
   } else {
     uji3Potongan = 0;
   }
-  debugPrint("Anggota, total 250.000 -> Potongan: ${uji3Potongan / uji3Total * 100}% (harus tetap 10%, aturan lama)");
 
-  debugPrint("\n=== DAFTAR BARANG ===");
+  debugPrint(
+    "Anggota, total 250.000 -> Potongan: "
+    "${uji3Potongan / uji3Total * 100}% (harus tetap 10%, aturan lama)",
+  );
 
-  List<String> namaBarangList = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  debugPrint("\n=== daftar barang ===");
+
+  List<String> namaBarangList = [
+    "Buku Tulis",
+    "Pulpen",
+    "Penghapus",
+    "Roti"
+  ];
   List<double> hargaBarangList = [3000, 2500, 1500, 5000];
 
   for (int i = 0; i < namaBarangList.length; i++) {
     int nomor = i + 1;
-    debugPrint("$nomor. ${namaBarangList[i]} - Rp. ${formatter.format(hargaBarangList[i])}");
+    debugPrint(
+      "$nomor. ${namaBarangList[i]} - Rp. "
+      "${formatter.format(hargaBarangList[i])}",
+    );
   }
 
   debugPrint("\n--- Penjualan Buku Tulis ---");
@@ -259,9 +286,14 @@ void main() {
     debugPrint("Terjual 1, sisa stok: $stokBukuTulis");
   }
 
-  debugPrint("\n=== Total Nilai Koperasi ===");
+  debugPrint("\n=== Total nilai koperasi ===");
 
-  List<String> namaBrgStok = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<String> namaBrgStok = [
+    "Buku Tulis",
+    "Pulpen",
+    "Penghapus",
+    "Roti"
+  ];
   List<double> hargaBrgStok = [3000, 2500, 1500, 5000];
   List<int> jumlahBrgStok = [50, 100, 80, 20];
 
@@ -271,32 +303,46 @@ void main() {
     double nilaiBarang = hargaBrgStok[i] * jumlahBrgStok[i];
     totalNilaiStok = totalNilaiStok + nilaiBarang;
     debugPrint(
-      "${namaBrgStok[i]} : ${jumlahBrgStok[i]} pcs x Rp${formatter.format(hargaBrgStok[i])} "
-      "= Rp${formatter.format(nilaiBarang)}"
+      "${namaBrgStok[i]} : ${jumlahBrgStok[i]} pcs x "
+      "Rp${formatter.format(hargaBrgStok[i])} "
+      "= Rp${formatter.format(nilaiBarang)}",
     );
   }
 
-  debugPrint("Total Nilai Seluruh Stok : Rp${formatter.format(totalNilaiStok)}");
+  debugPrint(
+    "Total Nilai Seluruh Stok : "
+    "Rp${formatter.format(totalNilaiStok)}",
+  );
 
-  debugPrint("\n=== LAPORAN STOK MENIPIS (< 5) ===");
+  debugPrint("\n=== laporan stok (< 5) ===");
 
-  List<String> namaBrgCek = ["Buku Tulis", "Pulpen", "Penghapus", "Roti"];
+  List<String> namaBrgCek = [
+    "Buku Tulis",
+    "Pulpen",
+    "Penghapus",
+    "Roti"
+  ];
   List<int> stokBrgCek = [3, 100, 4, 20];
 
   for (int i = 0; i < namaBrgCek.length; i++) {
     if (stokBrgCek[i] < 5) {
-      debugPrint("${namaBrgCek[i]} - sisa stok: ${stokBrgCek[i]} (PERLU RESTOCK!)");
+      debugPrint(
+        "${namaBrgCek[i]} - sisa stok: "
+        "${stokBrgCek[i]} (PERLU RESTOCK!)",
+      );
     }
   }
 
-  debugPrint("\n=== FUNGSI hitungTotal() ===");
+  debugPrint("\n=== fungs hitung total() ===");
 
   int jumlahTransaksi = 10;
   double hargaTransaksi = 3000.0;
   double hasilTotal = hitungTotal(jumlahTransaksi, hargaTransaksi);
 
   debugPrint("Jumlah : $jumlahTransaksi pcs");
-  debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi)}");
+  debugPrint(
+    "Harga Satuan : Rp${formatter.format(hargaTransaksi)}",
+  );
   debugPrint("Total : Rp${formatter.format(hasilTotal)}");
 
   debugPrint("\n== hitungan akhir ==");
@@ -305,38 +351,62 @@ void main() {
   double hargaTransaksi2 = 3000.0;
   double persenPotonganTransaksi = 32.0;
 
-  double totalSebelumPotongan = hitungTotal(jumlahTransaksi2, hargaTransaksi2);
-  double hargaAkhirFungsi = hitungHargaAkhir(totalSebelumPotongan, persenPotonganTransaksi);
+  double totalSebelumPotongan =
+      hitungTotal(jumlahTransaksi2, hargaTransaksi2);
+  double hargaAkhirFungsi =
+      hitungHargaAkhir(totalSebelumPotongan, persenPotonganTransaksi);
 
   debugPrint("Jumlah : $jumlahTransaksi2 pcs");
-  debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi2)}");
-  debugPrint("Total (sebelum potongan) : Rp${formatter.format(totalSebelumPotongan)}");
-  debugPrint("Persentase Potongan : $persenPotonganTransaksi%");
-  debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}");
+  debugPrint(
+    "Harga Satuan : Rp${formatter.format(hargaTransaksi2)}",
+  );
+  debugPrint(
+    "Total (sebelum potongan) : "
+    "Rp${formatter.format(totalSebelumPotongan)}",
+  );
+  debugPrint(
+    "Persentase Potongan : $persenPotonganTransaksi%",
+  );
+  debugPrint(
+    "Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}",
+  );
 
-  debugPrint("\n=== FUNGSI hitungHarga() ===");
+  debugPrint("\n=== fungsi hitung harga() ===");
 
   bool anggotaTes = true;
   double hargaAnggotaTes = 3000.0;
   double hargaUmumTes = 3500.0;
 
-  double hargaTerpilih = hitungHarga(anggotaTes, hargaAnggotaTes, hargaUmumTes);
+  double hargaTerpilih =
+      hitungHarga(anggotaTes, hargaAnggotaTes, hargaUmumTes);
 
-  debugPrint("Status Pembeli : ${anggotaTes ? 'Anggota' : 'Umum'}");
-  debugPrint("Harga Terpilih : Rp${formatter.format(hargaTerpilih)}");
+  debugPrint(
+    "Status Pembeli : ${anggotaTes ? 'Anggota' : 'Umum'}",
+  );
+  debugPrint(
+    "Harga Terpilih : Rp${formatter.format(hargaTerpilih)}",
+  );
 
-  debugPrint("\n== FUNGSI bayar khir komposisi ==");
+  debugPrint("\n== fungsi bayar khir komposisi ==");
 
   int jumlahBayar = 40;
   double hargaBayar = 3000.0;
   double persenPotonganBayar = 10;
 
-  double totalBayarAkhir = bayarAkhir(jumlahBayar, hargaBayar, persenPotonganBayar);
+  double totalBayarAkhir =
+      bayarAkhir(jumlahBayar, hargaBayar, persenPotonganBayar);
 
   debugPrint("Jumlah : $jumlahBayar pcs");
-  debugPrint("Harga Satuan : Rp${formatter.format(hargaBayar)}");
-  debugPrint("Persentase Potongan : $persenPotonganBayar%");
-  debugPrint("Harga Akhir (via bayarakhir) : Rp${formatter.format(totalBayarAkhir)}");
+  debugPrint(
+    "Harga Satuan : Rp${formatter.format(hargaBayar)}",
+  );
+  debugPrint(
+    "Persentase Potongan : $persenPotonganBayar%",
+  );
+  debugPrint(
+    "Harga Akhir (via bayarakhir) : "
+    "Rp${formatter.format(totalBayarAkhir)}",
+  );
 
   debugPrint("\n== daftar objek barang (kelas) ==");
 
@@ -345,10 +415,26 @@ void main() {
   Barang roti = Barang("Roti", 50000, 200);
 
   List<Barang> daftarBarang = [bukuTulis, pulpen, roti];
-  
+
   for (int i = 0; i < daftarBarang.length; i++) {
     daftarBarang[i].tampilkan();
   }
+
+  debugPrint("\n=== cek bisa jual T/F() ===");
+
+  int permintaanBeli = 110;
+  bool cekBukuTulis = bukuTulis.bisaDijual(permintaanBeli);
+  debugPrint(
+    "Mau beli $permintaanBeli ${bukuTulis.nama}, "
+    "stok tersedia ${bukuTulis.stok} -> Bisa dijual: $cekBukuTulis",
+  );
+
+  int permintaanBesar = 50;
+  bool cekPulpenBesar = pulpen.bisaDijual(permintaanBesar);
+  debugPrint(
+    "au beli $permintaanBesar ${pulpen.nama}, "
+    "stok tersedia ${pulpen.stok} -> Bisa dijual: $cekPulpenBesar",
+  );
 
   // Mengapa angka nilaiStok() (harga x stok) berguna bagi laporan aset koperasi?
   // Angka ini digunakan untuk mengetahui total nilai uang atau modal yang sedang 
@@ -362,7 +448,6 @@ void main() {
   runApp(const MyApp());
 }
 
-// ===== KELAS WIDGET FLUTTER =====
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
