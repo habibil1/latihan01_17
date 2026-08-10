@@ -7,6 +7,34 @@ double hitungTotal(int jumlah, double harga) {
 double hitungHargaAkhir(double total, double persenPotongan) {
   return total - (total * persenPotongan / 100);
 }
+double hitungHarga(bool anggota, double hAnggota, double hUmum) {
+  if (anggota) {
+    return hAnggota;
+  } else {
+    return hUmum;
+  }
+}
+double bayarAkhir(int jumlah, double harga, double persenPotongan) {
+  double total = hitungTotal(jumlah, harga);
+  double hargaAkhir = hitungHargaAkhir(total, persenPotongan);
+  return hargaAkhir;
+}
+
+class Barang {
+  String nama;
+  double harga;
+  int stok;
+
+  Barang(this.nama, this.harga, this.stok);
+
+  void tampilkan() {
+    debugPrint("=== KARTU BARANG ===");
+    debugPrint("Nama  : $nama");
+    debugPrint("Harga : Rp$harga");
+    debugPrint("Stok  : $stok");
+    debugPrint("");
+  }
+}
 
 void main() {
   var formatter = NumberFormat('#,###', 'id_ID');
@@ -264,18 +292,96 @@ void main() {
 
   debugPrint("\n== hitungan akhir ==");
 
-int jumlahTransaksi2 = 32;
-double hargaTransaksi2 = 3000.0;
-double persenPotonganTransaksi = 32.0; 
+  int jumlahTransaksi2 = 32;
+  double hargaTransaksi2 = 3000.0;
+  double persenPotonganTransaksi = 32.0;
 
-double totalSebelumPotongan = hitungTotal(jumlahTransaksi2, hargaTransaksi2);
-double hargaAkhirFungsi = hitungHargaAkhir(totalSebelumPotongan, persenPotonganTransaksi);
+  double totalSebelumPotongan = hitungTotal(jumlahTransaksi2, hargaTransaksi2);
+  double hargaAkhirFungsi = hitungHargaAkhir(totalSebelumPotongan, persenPotonganTransaksi);
 
-debugPrint("Jumlah : $jumlahTransaksi2 pcs");
-debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi2)}");
-debugPrint("Total (sebelum potongan) : Rp${formatter.format(totalSebelumPotongan)}");
-debugPrint("Persentase Potongan : $persenPotonganTransaksi%");
-debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}");
+  debugPrint("Jumlah : $jumlahTransaksi2 pcs");
+  debugPrint("Harga Satuan : Rp${formatter.format(hargaTransaksi2)}");
+  debugPrint("Total (sebelum potongan) : Rp${formatter.format(totalSebelumPotongan)}");
+  debugPrint("Persentase Potongan : $persenPotonganTransaksi%");
+  debugPrint("Harga Akhir : Rp${formatter.format(hargaAkhirFungsi)}");
+
+
+  // "Bagaimana pemecahan program menjadi fungsi membantu koperasi bila
+  // kelak aturan potongan diubah? Bagian mana yang cukup diubah sekali?"
+  //
+  // Enaknya kalau program dipecah jadi fungsi kayak hitungTotal() dan
+  // hitungHargaAkhir() itu, rumusnya cuma ditulis SEKALI aja di dalam
+  // fungsinya, nggak perlu disalin-salin lagi tiap kali ada transaksi baru.
+  // Jadi misalnya suatu saat koperasi mau ganti aturan potongan — dari
+  // yang tadinya 15% jadi 20%, atau nambah syarat diskon baru — kita
+  // cukup ubah kodenya DI DALAM fungsi hitungHargaAkhir() itu doang, satu
+  // tempat aja. Semua transaksi di seluruh program yang manggil fungsi
+  // ini bakal otomatis ikut pakai aturan yang baru, tanpa perlu nyari-cari
+  // dan ngubah satu-satu di banyak tempat yang berserakan. Ini bikin
+  // program jadi jauh lebih gampang dirawat, dan ngurangin risiko ada
+  // bagian yang "kelewatan" pas aturan diperbarui
+
+
+  debugPrint("\n=== FUNGSI hitungHarga() ===");
+
+  bool anggotaTes = true;
+  double hargaAnggotaTes = 3000.0;
+  double hargaUmumTes = 3500.0;
+
+  double hargaTerpilih = hitungHarga(anggotaTes, hargaAnggotaTes, hargaUmumTes);
+
+  debugPrint("Status Pembeli : ${anggotaTes ? 'Anggota' : 'Umum'}");
+  debugPrint("Harga Terpilih : Rp${formatter.format(hargaTerpilih)}");
+
+
+  // Mengapa memindah keputusan ini ke fungsi mengurangi risiko salah?
+  // Kalau logika "pilih harga sesuai jenis pembeli" ditulis berulang-ulang
+  // di banyak tempat (setiap kali ada transaksi baru), ada risiko besar
+  // salah satu tempat lupa dituliskan atau tertukar urutan kondisinya
+  // (misalnya keliru menaruh harga umum untuk anggota). Dengan memindahkan
+  // logika ini ke dalam SATU fungsi hitungHarga(), aturan "anggota dapat
+  // harga anggota, bukan anggota dapat harga umum" hanya perlu benar SEKALI
+  // saja di dalam fungsi ini. Semua bagian program yang memanggil fungsi
+  // ini otomatis mengikuti aturan yang sama dan konsisten, sehingga jauh
+  // lebih kecil kemungkinan terjadi salah ketik atau salah logika yang
+  // tercecer di berbagai tempat berbeda
+
+
+  debugPrint("\n== FUNGSI bayar khir komposisi ==");
+
+  int jumlahBayar = 40;
+  double hargaBayar = 3000.0;
+  double persenPotonganBayar = 10;
+
+  double totalBayarAkhir = bayarAkhir(jumlahBayar, hargaBayar, persenPotonganBayar);
+
+  debugPrint("Jumlah : $jumlahBayar pcs");
+  debugPrint("Harga Satuan : Rp${formatter.format(hargaBayar)}");
+  debugPrint("Persentase Potongan : $persenPotonganBayar%");
+  debugPrint("Harga Akhir (via bayarakhir) : Rp${formatter.format(totalBayarAkhir)}");
+
+  // Apa manfaat menyusun fungsi dari fungsi lain (komposisi)?
+  // Dengan menyusun fungsi bayarAkhir() dari fungsi-fungsi yang sudah ada
+  // sebelumnya (hitungTotal() dan hitungHargaAkhir()), kita tidak perlu
+  // menulis ulang rumus perhitungan dari nol. Setiap fungsi kecil punya
+  // tugasnya masing-masing yang jelas dan sederhana, lalu fungsi yang
+  // lebih besar cukup "menyusun" atau menggabungkan fungsi-fungsi kecil
+  // itu sesuai urutan proses yang diinginkan. Ini membuat kode lebih mudah
+  // dibaca (langsung terlihat alur prosesnya: hitung total dulu, baru
+  // hitung harga akhir), lebih mudah diuji satu per satu (kalau ada
+  // kesalahan, gampang dilacak fungsi mana yang bermasalah), dan tetap
+  // konsisten dengan aturan yang sudah didefinisikan di fungsi-fungsi
+  // sebelumnya tanpa perlu duplikasi kode
+
+  debugPrint("\n=== DAFTAR OBJEK BARANG (KELAS) ===");
+
+  Barang bukuTulis = Barang("Buku Tulis", 30000, 606);
+  Barang pulpen = Barang("Pulpen", 25000, 100);
+  Barang roti = Barang("Roti", 50000, 200);
+
+  bukuTulis.tampilkan();
+  pulpen.tampilkan();
+  roti.tampilkan();
 
   runApp(const MyApp());
 }
