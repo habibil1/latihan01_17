@@ -4,24 +4,41 @@ import 'package:intl/intl.dart';
 class Barang {
   String nama;
   double harga;
-  int stok;
+  int _stok; 
 
-  Barang(this.nama, this.harga, this.stok);
+  Barang(this.nama, this.harga, int stok1) : _stok = stok1;
+
+  int get stok => _stok;
 
   double nilaiStok() {
-    return harga * stok;
+    return harga * _stok;
   }
 
-  // ===== Method baru: cek kecukupan stok =====
   bool bisaDijual(int diminta) {
-    return diminta <= stok;
+    return diminta <= _stok;
+  }
+
+  bool jual(int n) {
+    if (n <= 0) {
+      debugPrint("transaksi gagal: jaumlah beli harus lebih dari 0");
+      return false;
+    }
+    
+    if (n <= _stok) {
+      _stok -= n;
+      debugPrint("berhasil: $n $nama terjual. Sisa stok: $_stok");
+      return true;
+    } else {
+      debugPrint("gagal: Stok $nama tidak cukup (minta: $n, Stok: $_stok)");
+      return false;
+    }
   }
 
   void tampilkan() {
     debugPrint("=== kartru barang ===");
     debugPrint("Nama       : $nama");
     debugPrint("Harga      : Rp $harga");
-    debugPrint("Stok       : $stok");
+    debugPrint("Stok       : $_stok");
     debugPrint("Nilai Stok : Rp ${nilaiStok()}");
     debugPrint("");
   }
@@ -34,9 +51,9 @@ class Pembeli {
   Pembeli(this.nama, this.statusAnggota);
 
   void tampilkan() {
-    debugPrint("=== pembeli ===");
+    debugPrint("=== DATA PEMBELI ===");
     debugPrint("Nama : $nama");
-    debugPrint("Status : ${statusAnggota ? 'anggota' : 'umum'}");
+    debugPrint("Status : ${statusAnggota ? 'Anggota' : 'Umum'}");
     debugPrint("");
   }
 }
@@ -446,11 +463,11 @@ void main() {
   int permintaanBesar = 50;
   bool cekPulpenBesar = pulpen.bisaDijual(permintaanBesar);
   debugPrint(
-    "au beli $permintaanBesar ${pulpen.nama}, "
+    "Mau beli $permintaanBesar ${pulpen.nama}, "
     "stok tersedia ${pulpen.stok} -> Bisa dijual: $cekPulpenBesar",
   );
 
-  debugPrint("\n=== pembeli ===");
+  debugPrint("\n=== DAFTAR OBJEK PEMBELI (KELAS) ===");
 
   Pembeli rajah = Pembeli("Rajah", true);
   Pembeli thonny = Pembeli("Thonny", false);
@@ -468,29 +485,15 @@ void main() {
     "beli ${bukuTulis.nama} seharga Rp${formatter.format(hargaUntukRajah)}",
   );
 
-  // Argumentasikan relasi apa yang wajar antara Pembeli & Barang dalam
-  // satu transaksi?
-  // Relasi yang wajar antara Pembeli dan Barang itu sifatnya "ketemu
-  // sementara" pas transaksi, bukan saling memiliki secara permanen.
-  // Status keanggotaan yang dipunya Pembeli dipakai buat nentuin harga
-  // dari Barang yang dibeli, tapi Barang itu sendiri nggak "nyimpen"
-  // data Pembeli, begitu juga sebaliknya — keduanya tetap berdiri
-  // sendiri-sendiri sebagai kelas yang independen. Idealnya, relasi
-  // ini nanti bisa diwakilkan lewat kelas ketiga, misalnya kelas
-  // Transaksi, yang nyimpen referensi ke satu Pembeli dan satu (atau
-  // beberapa) Barang yang dibeli, beserta jumlah dan harga akhirnya.
-  // Ini bikin kelas Pembeli dan Barang tetap sederhana dan fokus sama
-  // tanggung jawabnya masing-masing.
+  debugPrint("\n=-= enkapsulasi =-=");
+  bukuTulis.jual(60);
 
-  // Mengapa angka nilaiStok() (harga x stok) berguna bagi laporan aset koperasi?
-  // Angka ini digunakan untuk mengetahui total nilai uang atau modal yang sedang 
-  // tersimpan dalam bentuk barang dagangan di gudang maupun etalase. Dengan 
-  // mengetahui nilai dari tiap barang serta total keseluruhan stok, pengurus 
-  // koperasi bisa menyusun laporan neraca keuangan secara akurat, melihat 
-  // barang mana yang menyerap modal paling besar, serta membantu mengambil 
-  // keputusan manajemen (misalnya mengevaluasi barang bernilai tinggi yang 
-  // penjualannya lambat agar modal tidak tertahan).
+  bukuTulis.jual(89);
 
+//mencegah manipulasi data
+//menjamikn transaksi yang sah tanpa ada kecurangan 
+//maka dari itu private adalah cara yang paling bagus untuk sekarang 
+//agar data data koperasi tidak di manipulasi oleh pihak yang tidak bertanggung jawab
   runApp(const MyApp());
 }
 
