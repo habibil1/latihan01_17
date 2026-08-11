@@ -27,6 +27,20 @@ class Barang {
   }
 }
 
+class Pembeli {
+  String nama;
+  bool statusAnggota;
+
+  Pembeli(this.nama, this.statusAnggota);
+
+  void tampilkan() {
+    debugPrint("=== pembeli ===");
+    debugPrint("Nama : $nama");
+    debugPrint("Status : ${statusAnggota ? 'anggota' : 'umum'}");
+    debugPrint("");
+  }
+}
+
 double hitungTotal(int jumlah, double harga) {
   return jumlah * harga;
 }
@@ -435,6 +449,38 @@ void main() {
     "au beli $permintaanBesar ${pulpen.nama}, "
     "stok tersedia ${pulpen.stok} -> Bisa dijual: $cekPulpenBesar",
   );
+
+  debugPrint("\n=== pembeli ===");
+
+  Pembeli rajah = Pembeli("Rajah", true);
+  Pembeli thonny = Pembeli("Thonny", false);
+
+  rajah.tampilkan();
+  thonny.tampilkan();
+
+  double hargaUntukRajah = hitungHarga(
+    rajah.statusAnggota,
+    bukuTulis.harga,
+    bukuTulis.harga + 500,
+  );
+  debugPrint(
+    "${rajah.nama} (${rajah.statusAnggota ? 'Anggota' : 'Umum'}) "
+    "beli ${bukuTulis.nama} seharga Rp${formatter.format(hargaUntukRajah)}",
+  );
+
+  // Argumentasikan relasi apa yang wajar antara Pembeli & Barang dalam
+  // satu transaksi?
+  // Relasi yang wajar antara Pembeli dan Barang itu sifatnya "ketemu
+  // sementara" pas transaksi, bukan saling memiliki secara permanen.
+  // Status keanggotaan yang dipunya Pembeli dipakai buat nentuin harga
+  // dari Barang yang dibeli, tapi Barang itu sendiri nggak "nyimpen"
+  // data Pembeli, begitu juga sebaliknya — keduanya tetap berdiri
+  // sendiri-sendiri sebagai kelas yang independen. Idealnya, relasi
+  // ini nanti bisa diwakilkan lewat kelas ketiga, misalnya kelas
+  // Transaksi, yang nyimpen referensi ke satu Pembeli dan satu (atau
+  // beberapa) Barang yang dibeli, beserta jumlah dan harga akhirnya.
+  // Ini bikin kelas Pembeli dan Barang tetap sederhana dan fokus sama
+  // tanggung jawabnya masing-masing.
 
   // Mengapa angka nilaiStok() (harga x stok) berguna bagi laporan aset koperasi?
   // Angka ini digunakan untuk mengetahui total nilai uang atau modal yang sedang 
