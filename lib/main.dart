@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class Barang {
   String nama;
   double harga;
-  int _stok; 
+  int _stok;
 
   Barang(this.nama, this.harga, int stok1) : _stok = stok1;
 
@@ -23,7 +23,7 @@ class Barang {
       debugPrint("transaksi gagal: jaumlah beli harus lebih dari 0");
       return false;
     }
-    
+
     if (n <= _stok) {
       _stok -= n;
       debugPrint("berhasil: $n $nama terjual. Sisa stok: $_stok");
@@ -41,6 +41,17 @@ class Barang {
     debugPrint("Stok       : $_stok");
     debugPrint("Nilai Stok : Rp ${nilaiStok()}");
     debugPrint("");
+  }
+
+  void prosesBeli(String tiga) {
+    try {
+      int jumlah = int.parse(tiga);
+      jual(jumlah);
+    } catch (e) {
+      debugPrint("Input tidak valid \"$tiga\".");
+    } finally {
+      debugPrint("transaksi dicatat di log.");
+    }
   }
 }
 
@@ -78,6 +89,17 @@ double bayarAkhir(int jumlah, double harga, double persenPotongan) {
   double total = hitungTotal(jumlah, harga);
   double hargaAkhir = hitungHargaAkhir(total, persenPotongan);
   return hargaAkhir;
+}
+
+class BarangPromo extends Barang {
+  double persenDiskon;
+
+  BarangPromo(String nama, double harga, int stok, this.persenDiskon)
+      : super(nama, harga, stok);
+
+  double hargaSetelahDiskon() {
+    return harga - (harga * persenDiskon / 100);
+  }
 }
 
 void main() {
@@ -488,12 +510,26 @@ void main() {
   debugPrint("\n=-= enkapsulasi =-=");
   bukuTulis.jual(60);
 
-  bukuTulis.jual(89);
+  bukuTulis.jual(99);
 
-//mencegah manipulasi data
-//menjamikn transaksi yang sah tanpa ada kecurangan 
-//maka dari itu private adalah cara yang paling bagus untuk sekarang 
-//agar data data koperasi tidak di manipulasi oleh pihak yang tidak bertanggung jawab
+  //mencegah manipulasi data
+  //menjamikn transaksi yang sah tanpa ada kecurangan
+  //maka dari itu private adalah cara yang paling bagus untuk sekarang
+  //agar data data koperasi tidak di manipulasi oleh pihak yang tidak bertanggung jawab
+
+  debugPrint("\n=== Proses beli ===");
+
+  bukuTulis.prosesBeli("100");
+  bukuTulis.prosesBeli("90");
+
+//Dengan adanya try-catch-finally, sistem terbukti bisa menangani
+// kesalahan input tanpa harus berhenti total atau kehilangan data
+// transaksi lainnya. Ini penting bagi pengurus koperasi karena mereka
+// jadi yakin sistem tidak akan "rusak" atau butuh restart cuma gara-gara
+// satu petugas salah ketik — sistem tetap stabil, memberi pesan yang
+// jelas ke petugas untuk memperbaiki inputnya, dan tetap mencatat log
+// setiap upaya transaksi (baik berhasil maupun gagal) sebagai jejak
+// audit
   runApp(const MyApp());
 }
 
@@ -506,7 +542,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter demo coy',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(187, 255, 0, 1),
+          seedColor: const Color.fromARGB(255, 0, 255, 162),
         ),
       ),
       home: const MyHomePage(title: 'Flutter Demo coy'),
@@ -543,7 +579,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('You have pushed the button this many times:'),
+            const Text('235443v:'),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
