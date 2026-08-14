@@ -48,7 +48,7 @@ class Barang {
       int jumlah = int.parse(tiga);
       jual(jumlah);
     } catch (e) {
-      debugPrint("Input tidak valid \"$tiga\".");
+      debugPrint("\"$tiga\" bukan angka, silahkan masukkan angka yang benar.");
     } finally {
       debugPrint("transaksi dicatat di log.");
     }
@@ -102,7 +102,16 @@ class BarangPromo extends Barang {
   }
 }
 
-void main() {
+Future<void> muatLaporan() async {
+  debugPrint("Memuat laporan ...");
+  await Future.delayed(const Duration(seconds: 3));
+  debugPrint("Laporan  berhasil dimuat.");
+}
+void main() async {
+
+  debugPrint("\n=== laporan penjualan ===");
+await muatLaporan();
+
   var formatter = NumberFormat('#,###', 'id_ID');
 
   String namaBarang = "Buku Tulis";
@@ -519,8 +528,9 @@ void main() {
 
   debugPrint("\n=== Proses beli ===");
 
-  bukuTulis.prosesBeli("100");
-  bukuTulis.prosesBeli("90");
+  bukuTulis.prosesBeli("tigo");
+  bukuTulis.prosesBeli("122");
+  bukuTulis.prosesBeli("9999");
 
 //Dengan adanya try-catch-finally, sistem terbukti bisa menangani
 // kesalahan input tanpa harus berhenti total atau kehilangan data
@@ -530,6 +540,20 @@ void main() {
 // jelas ke petugas untuk memperbaiki inputnya, dan tetap mencatat log
 // setiap upaya transaksi (baik berhasil maupun gagal) sebagai jejak
 // audit
+
+//kenapa pesan spesif memabntu petugas
+// Pesan spesifik seperti "'dua' bukan angka, ulangi" langsung menunjukkan
+// DUA hal penting sekaligus: (1) apa yang tadi diketik petugas (persis
+// nilai inputnya), dan (2) apa yang harus dilakukan selanjutnya (ulangi
+// input). Ini jauh lebih membantu dibanding pesan generik seperti "Error"
+// atau "Input tidak valid", yang tidak menjelaskan APA yang salah atau
+// APA yang seharusnya dilakukan petugas. Dengan pesan spesifik, petugas
+// tidak perlu bingung menebak-nebak kesalahannya, tidak perlu memanggil
+// teknisi IT untuk hal sepele, dan bisa langsung memperbaiki input tanpa
+// membuang waktu — mempercepat proses transaksi
+
+
+
   runApp(const MyApp());
 }
 
