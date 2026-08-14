@@ -498,7 +498,7 @@ await muatLaporan();
     "stok tersedia ${pulpen.stok} -> Bisa dijual: $cekPulpenBesar",
   );
 
-  debugPrint("\n=== DAFTAR OBJEK PEMBELI (KELAS) ===");
+  debugPrint("\n=== daftar objek pembeli ===");
 
   Pembeli rajah = Pembeli("Rajah", true);
   Pembeli thonny = Pembeli("Thonny", false);
